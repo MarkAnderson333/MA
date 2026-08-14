@@ -84,17 +84,27 @@ def extract_features(route, wingspan):
     strength_gap = abs(USER["left_strength"] - USER["right_strength"])
     strength_avg = (USER["left_strength"] + USER["right_strength"]) / 2.0
 
+    # 特征5：力量体重比（力量 ÷ 体重，再归一到参考体重 50kg）
+    # 为什么看这个比：攀岩的关键不是"你多有力"，而是"你的力量扛不扛得住你的体重"
+    # 同样力量，体重越大，每公斤分到的力量越少，爬起来越费力
+    # 效果：体重=50 时此项和旧版一模一样；体重>50 难度升高；体重<50 难度降低
+    weight = USER.get("weight", 50)
+    if weight <= 0:
+        weight = 50                      # 兜底：防止体重填 0 导致除零报错
+    strength_ratio = (strength_avg / 5.0) * (50.0 / weight)
+
     return {
         "gap_ratio": gap_ratio,
         "angle_ratio": angle_ratio,
         "size_factor": size_factor,
         "strength_gap": strength_gap,
         "strength_avg": strength_avg,
+        "strength_ratio": strength_ratio,
     }
 
 
 # ============ 第四部分：难度模型 v1 ============
-# 难度 = w1*间距比 + w2*仰角比 + w3*大小系数 - w4*力量 + w5*偏手性惩罚
+# 难度 = w1*间距比 + w2*仰角比 + w3*大小系数 - w4*力量体重比 + w5*偏手性惩罚
 # 权重是"初始猜测值"，D2 用三组测试数据来调参
 
 W = {"w1": 3.0, "w2": 2.5, "w3": 1.5, "w4": 2.0, "w5": 0.8}
@@ -105,9 +115,28 @@ def compute_difficulty(feat):
     d = (W["w1"] * feat["gap_ratio"]
          + W["w2"] * feat["angle_ratio"]
          + W["w3"] * feat["size_factor"]
-         - W["w4"] * (feat["strength_avg"] / 5.0)
+         - W["w4"] * feat["strength_ratio"]
          + W["w5"] * feat["strength_gap"])
     return round(d, 2)
+
+
+# ============ 推荐算法（D2 新增）============
+
+def recommend_routes(results, n=3, lo=0.5, hi=1.5):
+    """从所有路线里挑出最适合用户的 n 条。
+
+    思路：
+    1. 先找难度在甜点区 [lo, hi] 内的路线（有点挑战但够得着）
+    2. 甜点区里的按"离 1.0 最近"排序（1.0 是完美挑战点）
+    3. 如果甜点区不够 n 条，用离 1.0 最近的路线补足
+    """
+    in_zone = [r for r in results if lo <= r["difficulty"] <= hi]
+    in_zone.sort(key=lambda r: abs(r["difficulty"] - 1.0))
+    if len(in_zone) >= n:
+        return in_zone[:n]
+    rest = [r for r in results if r not in in_zone]
+    rest.sort(key=lambda r: abs(r["difficulty"] - 1.0))
+    return (in_zone + rest)[:n]
 
 
 # ============ 第五部分：主管线 ============
