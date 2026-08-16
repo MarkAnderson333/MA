@@ -80,7 +80,7 @@ st.markdown(f"""
 
 # ================= 页头 =================
 st.markdown(
-    f'<h1 style="font-family:Georgia,serif;color:{INK};">🧗 ClimbFit｜今日训练计划</h1>',
+    f'<h1 style="font-family:Georgia,serif;color:{INK};">🧗 ClimbMatch｜今日训练计划</h1>',
     unsafe_allow_html=True,
 )
 st.markdown(
