@@ -16,7 +16,7 @@ import pandas as pd
 import random
 import difficulty_model_v1 as model
 
-st.set_page_config(page_title="ClimbFit", page_icon="🧗")
+st.set_page_config(page_title="ClimbMatch", page_icon="🧗")
 
 # ================= retro colors =================
 CREAM = "#F5EFE3"      # page background: cream
