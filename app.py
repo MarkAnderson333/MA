@@ -264,7 +264,7 @@ else:
     dcol1, dcol2, dcol3 = st.columns(3)
     dcol1.metric("仰角 Angle", f"{route_data['angle']}°")
     dcol2.metric("岩点数 Holds", f"{len(holds)} 个")
-    dcol3.metric("平均大小 Avg Size", f"{sum(h['size'] for h in holds)/len(holds):.1f}（越小越难）")
+    dcol3.metric("平均大小 Avg Size", f"{sum(h['size'] for h in holds)/len(holds):.1f}")
     st.markdown(
         f'<p style="color:{INK_SOFT};font-size:0.9em;">岩点从下到上：{sizes}</p>',
         unsafe_allow_html=True,
