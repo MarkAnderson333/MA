@@ -71,7 +71,7 @@ st.markdown(f"""
 
 # ================= header =================
 st.markdown(
-    f'<h1 style="font-family:Georgia,serif;color:{INK};">🧗 ClimbFit | Today\'s Training Plan</h1>',
+    f'<h1 style="font-family:Georgia,serif;color:{INK};">🧗 ClimbMatch | Today\'s Training Plan</h1>',
     unsafe_allow_html=True,
 )
 st.markdown(
