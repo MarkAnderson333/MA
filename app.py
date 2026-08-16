@@ -1,5 +1,5 @@
 """
-ClimbFit Training Plan App (4 pages · retro low-saturation colors)
+ClimbMatch Training Plan App (4 pages · retro low-saturation colors)
 =================================================================
 All interface text is in plain, friendly English (no jargon).
   Page 1: Warm-up  (sage green)
@@ -254,7 +254,7 @@ else:
     dcol1, dcol2, dcol3 = st.columns(3)
     dcol1.metric("Angle", f"{route_data['angle']}°")
     dcol2.metric("Holds", f"{len(holds)}")
-    dcol3.metric("Avg Size", f"{sum(h['size'] for h in holds)/len(holds):.1f} (smaller = harder)")
+    dcol3.metric("Avg Size", f"{sum(h['size'] for h in holds)/len(holds):.1f} ")
     st.markdown(
         f'<p style="color:{INK_SOFT};font-size:0.9em;">Holds from bottom to top: {sizes}</p>',
         unsafe_allow_html=True,
