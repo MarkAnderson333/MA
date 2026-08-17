@@ -101,6 +101,21 @@ with st.sidebar:
         st.session_state.routes = model.generate_routes(30)
     if st.button("🎲 New Routes", use_container_width=True):
         st.session_state.routes = model.generate_routes(30)
+# ========== 统一放在一起的力量等级说明表格 Tips ==========
+    st.caption("Strength Rating Reference Table")
+    strength_table = pd.DataFrame([
+        {"Score":1,
+         "Description (English)":"Cannot do a single pull‑up; hands tire quickly when gripping"},
+        {"Score":2,
+         "Description (English)":"Can do 1‑2 pull‑ups; carrying everyday items feels difficult"},
+        {"Score":3,
+         "Description (English)":"Can do 3‑5 pull‑ups; can lift 5 kg with one hand easily"},
+        {"Score":4,
+         "Description (English)":"Can do 6‑10 pull‑ups; can carry a full bucket of water with one hand"},
+        {"Score":5,
+         "Description (English)":"Can comfortably do more than 10 pull‑ups; rarely loses arm‑wrestling"},
+])
+    st.dataframe(strength_table, hide_index=True, use_container_width=True)
 
 # ================= compute: sliders recalc instantly =================
 model.USER = {
